@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Examen de Cálculo Mental - Operaciones Combinadas</title>
+  <title>Examen de Cálculo Mental - Operaciones Combinadas Básicas</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,8 +25,8 @@
       <div class="inline-flex items-center justify-center p-3 bg-indigo-600 text-white rounded-2xl shadow-lg mb-3">
         <i class="fa-solid fa-calculator text-3xl"></i>
       </div>
-      <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Examen: Operaciones Combinadas</h1>
-      <p class="text-slate-500 font-medium">Números Naturales (10 preguntas - 1 intento por día)</p>
+      <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Examen: Operaciones Combinadas Básicas</h1>
+      <p class="text-slate-500 font-medium">Cálculo mental sencillo (10 preguntas - 1 intento por día)</p>
     </div>
 
     <!-- PANTALLA: YA COMPLETADO -->
@@ -64,7 +64,7 @@
 
         <button type="submit" 
           class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2 mt-2">
-          <span>Comenzar Examen de Operaciones</span>
+          <span>Comenzar Examen</span>
           <i class="fa-solid fa-arrow-right"></i>
         </button>
       </form>
@@ -85,11 +85,11 @@
       </div>
 
       <div class="my-8 text-center">
-        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">Resuelve la siguiente operación combinada:</span>
-        <div class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-wide font-mono" id="questionText">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">Resuelve mentalmente la siguiente operación:</span>
+        <div class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-wide font-mono" id="questionText">
           --
         </div>
-        <p class="text-xs text-slate-400 mt-4">Escribe tu respuesta numérica entera (sin decimales ni signos negativos).</p>
+        <p class="text-xs text-slate-400 mt-4">Escribe tu respuesta como un número natural.</p>
       </div>
 
       <form id="answerForm" onsubmit="submitAnswer(event)" class="space-y-4 max-w-md mx-auto">
@@ -139,7 +139,7 @@
     // =========================================================================
     // CONFIGURACIÓN DE GOOGLE APPS SCRIPT
     // =========================================================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1GEd0myt0GQWdvwhYl-sijloDx78vPDccwTwfqBeWuzBCgz0umF_m2nWURlJVq-8/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZi0-8ooNGRSQoa4RZUfIK2Eygw9FZep3Fupss0tcYsvm2_9fxvVnNs7en0nHNX7uN/exec";
 
     let currentQuestionIndex = 0;
     const totalQuestions = 10;
@@ -150,7 +150,7 @@
 
     // COMPROBACIÓN DE INTENTO DIARIO
     window.addEventListener('DOMContentLoaded', () => {
-      const savedResult = localStorage.getItem('examen_op_combinadas_naturales_completado');
+      const savedResult = localStorage.getItem('examen_op_combinadas_basicas_completado');
       const hoyStr = new Date().toLocaleDateString('es-ES');
 
       if (savedResult) {
@@ -169,92 +169,97 @@
       }
     });
 
-    // GENERADOR DE OPERACIONES COMBINADAS EN NÚMEROS NATURALES (SIN NEGATIVOS NI DECIMALES)
+    // GENERADOR DE OPERACIONES COMBINADAS SENCILLAS (CÁLCULO MENTAL ESO)
     function generateSingleQuestion() {
-      const types = [1, 2, 3, 4, 5];
-      const type = types[Math.floor(Math.random() * types.length)];
+      const type = Math.floor(Math.random() * 6) + 1;
 
       let exprHTML = "", solution = 0;
 
       if (type === 1) { 
-        // Estructura: a + b · c - d
+        // Estructura: a + b · c  (Ej: 2 + 2 · 3)
+        const a = Math.floor(Math.random() * 10) + 1;
         const b = Math.floor(Math.random() * 8) + 2;
         const c = Math.floor(Math.random() * 8) + 2;
-        const prod = b * c;
-        const a = Math.floor(Math.random() * 15) + 1;
-        const d = Math.floor(Math.random() * (a + prod)); // d < (a + prod) para evitar negativos
-        solution = a + prod - d;
-        exprHTML = `${a} + ${b} · ${c} - ${d}`;
+        solution = a + (b * c);
+        exprHTML = `${a} + ${b} · ${c}`;
       } 
       else if (type === 2) { 
-        // Estructura: a · (b + c) - d : e
-        const b = Math.floor(Math.random() * 9) + 1;
-        const c = Math.floor(Math.random() * 9) + 1;
-        const sumBC = b + c;
-        const a = Math.floor(Math.random() * 5) + 2;
-        const mult = a * sumBC;
-
-        const e = Math.floor(Math.random() * 6) + 2;
-        const multDiv = Math.floor(Math.random() * 5) + 1;
-        const d = e * multDiv; // Garantiza división exacta
-
-        // Para evitar negativos: mult >= d / e
-        const divRes = d / e;
-        if (mult >= divRes) {
-          solution = mult - divRes;
-          exprHTML = `${a} · (${b} + ${c}) - ${d} : ${e}`;
+        // Estructura: (a - b) · c  o  (a + b) · c  (Ej: (5 - 3) · 4)
+        const isMinus = Math.random() < 0.5;
+        if (isMinus) {
+          const b = Math.floor(Math.random() * 7) + 1;
+          const diff = Math.floor(Math.random() * 8) + 1;
+          const a = b + diff; // Garantiza a > b
+          const c = Math.floor(Math.random() * 8) + 2;
+          solution = (a - b) * c;
+          exprHTML = `(${a} - ${b}) · ${c}`;
         } else {
-          solution = mult + divRes;
-          exprHTML = `${a} · (${b} + ${c}) + ${d} : ${e}`;
+          const a = Math.floor(Math.random() * 6) + 1;
+          const b = Math.floor(Math.random() * 6) + 1;
+          const c = Math.floor(Math.random() * 6) + 2;
+          solution = (a + b) * c;
+          exprHTML = `(${a} + ${b}) · ${c}`;
         }
       } 
       else if (type === 3) { 
-        // Estructura: (a - b) · c + d : e
+        // Estructura: a · b - c : d  o  a · b + c : d  (Ej: 4 · 2 - 18 : 9)
+        const a = Math.floor(Math.random() * 8) + 2;
         const b = Math.floor(Math.random() * 8) + 2;
-        const diff = Math.floor(Math.random() * 8) + 2;
-        const a = b + diff; // a > b, evita negativos
-        const c = Math.floor(Math.random() * 6) + 2;
+        const prod = a * b;
 
-        const e = Math.floor(Math.random() * 5) + 2;
-        const multDiv = Math.floor(Math.random() * 6) + 1;
-        const d = e * multDiv; // División exacta
+        const d = Math.floor(Math.random() * 8) + 2;
+        const multDiv = Math.floor(Math.random() * 5) + 1;
+        const c = d * multDiv; // Garantiza división exacta c : d
+        const divRes = c / d;
 
-        solution = (a - b) * c + (d / e);
-        exprHTML = `(${a} - ${b}) · ${c} + ${d} : ${e}`;
+        const isMinus = Math.random() < 0.5;
+        if (isMinus && prod >= divRes) {
+          solution = prod - divRes;
+          exprHTML = `${a} · ${b} - ${c} : ${d}`;
+        } else {
+          solution = prod + divRes;
+          exprHTML = `${a} · ${b} + ${c} : ${d}`;
+        }
       } 
       else if (type === 4) { 
-        // Estructura: a + b : (c - d)
-        const d = Math.floor(Math.random() * 6) + 1;
-        const diff = Math.floor(Math.random() * 6) + 2;
-        const c = d + diff; // c > d
-        
-        const multDiv = Math.floor(Math.random() * 8) + 1;
-        const b = diff * multDiv; // División exacta b / (c - d)
+        // Estructura: a - b : c  o  a + b : c  (Ej: 10 - 10 : 5)
+        const c = Math.floor(Math.random() * 8) + 2;
+        const multDiv = Math.floor(Math.random() * 6) + 1;
+        const b = c * multDiv; // Garantiza división exacta
+        const divRes = b / c;
 
-        const a = Math.floor(Math.random() * 15) + 2;
-        solution = a + (b / (c - d));
-        exprHTML = `${a} + ${b} : (${c} - ${d})`;
+        const isMinus = Math.random() < 0.5;
+        if (isMinus) {
+          const extra = Math.floor(Math.random() * 10) + 1;
+          const a = divRes + extra; // Garantiza a > divRes
+          solution = a - divRes;
+          exprHTML = `${a} - ${b} : ${c}`;
+        } else {
+          const a = Math.floor(Math.random() * 12) + 1;
+          solution = a + divRes;
+          exprHTML = `${a} + ${b} : ${c}`;
+        }
+      } 
+      else if (type === 5) { 
+        // Estructura: a · (b - c)  (Ej: 3 · (8 - 5))
+        const c = Math.floor(Math.random() * 6) + 1;
+        const diff = Math.floor(Math.random() * 6) + 1;
+        const b = c + diff; // Garantiza b > c
+        const a = Math.floor(Math.random() * 8) + 2;
+        solution = a * (b - c);
+        exprHTML = `${a} · (${b} - ${c})`;
       } 
       else { 
-        // Estructura: (a + b · c) : d
+        // Estructura: a : b + c · d  (Ej: 12 : 3 + 2 · 4)
         const b = Math.floor(Math.random() * 6) + 2;
+        const multDiv = Math.floor(Math.random() * 5) + 1;
+        const a = b * multDiv; // División exacta
+        
         const c = Math.floor(Math.random() * 6) + 2;
-        const prod = b * c;
+        const d = Math.floor(Math.random() * 6) + 2;
 
-        const d = Math.floor(Math.random() * 5) + 2;
-        const multTarget = Math.floor(Math.random() * 5) + 2;
-        const totalNumerator = d * multTarget;
-
-        let a = totalNumerator - prod;
-        if (a <= 0) {
-          // Ajustamos para que 'a' sea positivo
-          const newMult = Math.ceil((prod + 1) / d) + Math.floor(Math.random() * 3);
-          a = (d * newMult) - prod;
-          solution = newMult;
-        } else {
-          solution = multTarget;
-        }
-        exprHTML = `(${a} + ${b} · ${c}) : ${d}`;
+        solution = (a / b) + (c * d);
+        exprHTML = `${a} : ${b} + ${c} · ${d}`;
       }
 
       return { exprHTML, solution };
@@ -359,7 +364,7 @@
         tiempo: totalSeconds
       };
 
-      localStorage.setItem('examen_op_combinadas_naturales_completado', JSON.stringify(resultPayload));
+      localStorage.setItem('examen_op_combinadas_basicas_completado', JSON.stringify(resultPayload));
 
       sendToGoogleSheets(resultPayload);
     }
